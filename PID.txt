@@ -1,0 +1,55 @@
+int SP_Kp = 10
+int SP_Ki
+int SP_Kd
+int SP set point plant
+int sensor //(feedback)
+int PID_error;
+int SP
+int PID_p
+
+
+
+  //Pembacaan error
+  PID_error = SP - Sensor;
+  
+  //bagian Proportional
+  PID_p = 0.01*SP_Kp*PID_error ;
+  
+  //bagian Integral
+  PID_i = 0.01*PID_i + (SP_Ki * PID_error);
+  
+  //bagian Derivative
+  Time = millis();
+  if((Time- timePrev) >= 1000)
+  {
+  timePrev = Time;
+  elapsedTime = (Time_ - timePrev) / 1000;
+  previous_error = PID_error;
+  PID_d = 0.01*SP_Kd*((PID_error - previous_error)/elapsedTime);
+  }
+
+  //Total Value PID
+  PID_value = PID_p - PID_i + PID_d;
+
+  out = map(PID_value,0,1024,0,PV); //manipulated variable 0 - 100 (0 - 60 derajat)
+  
+  analogWrite(3,out);
+  servo.Write(90-out);
+
+
+
+
+1. Feedback control (varriable / diskrit)
+adalah kondsi dimana keluaran hanya dikoreksi dengan adanya 1 input sebagai umpan balik (feedback)
+2. Cascade 
+adalah output dari sistem sebelumnya menjadi input sistem selanjutnya
+dengan nilai keluaran sistem selanjutnya yang sudah disepakati.	
+3. feed forward control
+adalah sistem yang bekerja mengendalikan gangguan sistem (disturbance)
+4. ratio control
+adalah sistem yang meng eksekusi resep sebagai input
+5. feedforward feedback control
+adalah sistem yang mengendalikan keluaran berdasarkan 2 umpan balik (feedback)
+a. umpan balik utama
+b. umpan balik gangguan
+
